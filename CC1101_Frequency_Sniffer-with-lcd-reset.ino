@@ -118,7 +118,7 @@ typedef struct
   int rssi_fine;
 } FrequencyRSSI;
 
-int linecount=0;
+int linecount=3;
 
 void setup() {
   Serial.begin(115200);
@@ -141,16 +141,17 @@ void setup() {
 
   // Clear the buffer
   display.clearDisplay();
+  display.setCursor(0,0);
+  display.setTextSize(1);
+  display.setTextColor(WHITE); 
 
-  // Draw a single pixel in white
-  display.drawPixel(10, 10, SSD1306_WHITE);
+  // Show startup on OLED
+  sprintf(buff, "Starting...\n");
+  display.println(buff);
 
   // Show the display buffer on the screen. You MUST call display() after
   // drawing commands to make them visible on screen!
   display.display();
-  display.setTextSize(1);
-  display.setTextColor(WHITE); 
-
 
   Serial.printf("Frequency Analyzer Starting...");
   radio.begin();
@@ -217,6 +218,7 @@ void loop() {
     sprintf(buff, "FINE Freq: %.2f     RSSI: %d\n", (float)frequency_rssi.frequency_fine / 1000000.0, frequency_rssi.rssi_fine);
     Serial.print(buff);
     display.println(buff);
+    display.display();      // Show text 
 
 //    Serial.printf("FINE        Frequency: %.2f  RSSI: %d\n", (float)frequency_rssi.frequency_fine / 1000000.0, frequency_rssi.rssi_fine);
 //    display.println("FINE        Frequency: %.2f  RSSI: %d\n", (float)frequency_rssi.frequency_fine / 1000000.0, frequency_rssi.rssi_fine);
@@ -234,11 +236,12 @@ void loop() {
     sprintf(buff, "COARSE Freq: %.2f   RSSI: %d\n", (float)frequency_rssi.frequency_coarse / 1000000.0, frequency_rssi.rssi_coarse);
     Serial.print(buff);
     display.println(buff);
+    display.display();      // Show text 
 
 //    Serial.printf("COARSE      Frequency: %.2f  RSSI: %d\n", (float)frequency_rssi.frequency_coarse / 1000000.0, frequency_rssi.rssi_coarse);
 //    display.println("COARSE      Frequency: %.2f  RSSI: %d\n", (float)frequency_rssi.frequency_coarse / 1000000.0, frequency_rssi.rssi_coarse);
   }
-   display.display();      // Show text 
+
 
   delay(10);
 }
